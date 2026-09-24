@@ -1,0 +1,75 @@
+<div class="auth">
+
+  <!-- Bascule clair / sombre, accessible avant même la connexion -->
+  <button class="bascule-auth" (click)="basculerTheme()"
+          role="switch" [attr.aria-checked]="themeClair"
+          [attr.aria-label]="themeClair ? 'Passer en thème sombre' : 'Passer en thème clair'"
+          [title]="themeClair ? 'Passer en thème sombre' : 'Passer en thème clair'">
+    {{ themeClair ? '☀' : '☾' }}
+  </button>
+
+  <!-- Vitrine -->
+  <aside class="auth-vitrine">
+    <div>
+      <div class="marque-nom">Rang Moy <em>Gaaw</em></div>
+      <div class="marque-sous">Transport &amp; Mobilité · Sénégal</div>
+      <div class="filet-drapeau"></div>
+    </div>
+
+    <div class="accroche">
+      <h1>Mon rang<br>arrive <em>vite</em></h1>
+      <p>
+        Suivi GPS en temps réel, paiement mobile Wave &amp; Orange Money,
+        itinéraires intelligents et assistant en wolof — pour tous les Sénégalais.
+      </p>
+    </div>
+
+    <div class="chiffres">
+      <div>
+        <span class="chiffre-val">500+</span>
+        <span class="chiffre-lbl">Bus suivis</span>
+      </div>
+      <div>
+        <span class="chiffre-val">47</span>
+        <span class="chiffre-lbl">Lignes DDD &amp; BRT</span>
+      </div>
+      <div>
+        <span class="chiffre-val">94K</span>
+        <span class="chiffre-lbl">Voyageurs / jour</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Formulaire -->
+  <section class="auth-panneau">
+    <div class="panneau-entete">
+      <div class="panneau-logo">🚌</div>
+      <h2>Bon retour</h2>
+      <p>Connectez-vous à votre espace</p>
+    </div>
+
+    <div class="form-groupe">
+      <label>Nom d'utilisateur</label>
+      <input type="text" [(ngModel)]="username"
+             placeholder="mamadou_diallo" class="champ"/>
+    </div>
+
+    <div class="form-groupe">
+      <label>Mot de passe</label>
+      <input type="password" [(ngModel)]="password"
+             placeholder="••••••••" class="champ"
+             (keyup.enter)="seConnecter()"/>
+    </div>
+
+    <div *ngIf="erreur" class="msg msg-erreur">⚠ {{ erreur }}</div>
+
+    <button (click)="seConnecter()" [disabled]="chargement"
+            class="btn btn-or btn-bloc">
+      {{ chargement ? 'Connexion…' : 'Se connecter' }}
+    </button>
+
+    <div class="lien-bas">
+      Pas encore de compte ? <a routerLink="/register">Créer un compte</a>
+    </div>
+  </section>
+</div>

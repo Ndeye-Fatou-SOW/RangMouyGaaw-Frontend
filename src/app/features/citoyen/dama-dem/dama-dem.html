@@ -1,0 +1,103 @@
+<div class="chat-page">
+
+  <!-- En-tête de l'assistant -->
+  <header class="chat-entete">
+    <div class="avatar">
+      <span class="avatar-emoji">🤖</span>
+      <span class="avatar-statut"></span>
+    </div>
+
+    <div class="entete-txt">
+      <h1>Dama dem</h1>
+      <p>Assistant transport · Français &amp; Wolof</p>
+    </div>
+
+    <div class="entete-actions">
+      <button class="btn-icone" [class.actif]="lectureVocaleActive"
+              (click)="basculerLectureVocale()"
+              [title]="lectureVocaleActive ? 'Désactiver la lecture vocale' : 'Activer la lecture vocale'">
+        {{ lectureVocaleActive ? '🔊' : '🔇' }}
+      </button>
+      <button class="btn-icone danger" (click)="effacerHistorique()"
+              title="Effacer la conversation">🗑</button>
+    </div>
+  </header>
+
+  <!-- Fil de discussion -->
+  <div class="chat-fil" #fil>
+    <div *ngFor="let msg of messages"
+         class="msg-ligne"
+         [class.est-user]="msg.role === 'user'">
+
+      <div class="msg-avatar" *ngIf="msg.role === 'assistant'">🤖</div>
+
+      <div class="bulle" [class.bulle-user]="msg.role === 'user'">
+        <span class="bulle-txt">{{ msg.contenu }}</span>
+
+        <button *ngIf="msg.role === 'user' && msg.audioUrl"
+                (click)="lireAudioEnvoye(msg.audioUrl!)"
+                class="btn-rejouer" title="Réécouter le message vocal">▶</button>
+
+        <button *ngIf="msg.role === 'assistant'"
+                (click)="rejouerMessage(msg)"
+                [disabled]="msg.genereEnCours"
+                class="btn-rejouer"
+                [title]="msg.audioUrl ? 'Réécouter' : 'Écouter la réponse (voix Gemini)'">
+          {{ msg.genereEnCours ? '⏳' : '▶' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Indicateur de frappe -->
+    <div *ngIf="chargement" class="msg-ligne">
+      <div class="msg-avatar">🤖</div>
+      <div class="bulle frappe">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Suggestions rapides -->
+  <div class="suggestions" *ngIf="messages.length <= 1">
+    <button class="suggestion" (click)="poserSuggestion('Comment aller de Médina à Pikine ?')">
+      🗺 Médina → Pikine
+    </button>
+    <button class="suggestion" (click)="poserSuggestion('Quel est le tarif pour Diamniadio ?')">
+      💰 Tarif Diamniadio
+    </button>
+    <button class="suggestion" (click)="poserSuggestion('Quelle ligne passe par Guédiawaye ?')">
+      🚌 Lignes Guédiawaye
+    </button>
+    <button class="suggestion" (click)="poserSuggestion('Ana bus bi ci Plateau ?')">
+      🇸🇳 Poser en wolof
+    </button>
+  </div>
+
+  <!-- Saisie -->
+  <div class="chat-saisie">
+    <div class="saisie-boite" [class.enregistre]="ecouteEnCours">
+      <input type="text"
+             [(ngModel)]="question"
+             [disabled]="ecouteEnCours"
+             [placeholder]="ecouteEnCours ? 'Je vous écoute…' : 'Posez votre question en français ou en wolof…'"
+             (keyup.enter)="envoyerQuestion()"/>
+
+      <button *ngIf="vocalSupporte"
+              (click)="basculerEcoute()"
+              [disabled]="chargement"
+              [class.ecoute]="ecouteEnCours"
+              class="btn-micro"
+              [title]="ecouteEnCours ? 'Arrêter' : 'Poser la question à l\'oral'">
+        {{ ecouteEnCours ? '⏹' : '🎤' }}
+      </button>
+
+      <button (click)="envoyerQuestion()"
+              [disabled]="chargement || !question.trim() || ecouteEnCours"
+              class="btn-envoyer" title="Envoyer">➤</button>
+    </div>
+
+    <p class="saisie-aide" *ngIf="ecouteEnCours">
+      <span class="point-live"></span> Enregistrement en cours — cliquez sur ⏹ pour envoyer
+    </p>
+  </div>
+</div>

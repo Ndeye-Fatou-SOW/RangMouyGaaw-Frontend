@@ -1,0 +1,70 @@
+<nav class="barre" *ngIf="authService.isLoggedIn()">
+
+  <!-- Marque -->
+  <a class="marque" routerLink="/citoyen" (click)="fermerMenu()">
+    <span class="marque-pastille">🚌</span>
+    <span class="marque-texte">
+      <span class="marque-nom">Rang Moy <em>Gaaw</em></span>
+      <span class="marque-drapeau"></span>
+    </span>
+  </a>
+
+  <!-- Bouton tiroir (mobile) -->
+  <button class="btn-tiroir" (click)="basculerMenu()" [attr.aria-expanded]="menuOuvert"
+          aria-label="Ouvrir le menu">
+    <span [class.croix]="menuOuvert"></span>
+  </button>
+
+  <!-- Liens -->
+  <div class="liens" [class.ouvert]="menuOuvert">
+
+    <div class="groupe">
+      <span class="groupe-titre">Citoyen</span>
+      <a *ngFor="let lien of liensCitoyen"
+         [routerLink]="lien.chemin"
+         routerLinkActive="actif"
+         [routerLinkActiveOptions]="{ exact: true }"
+         (click)="fermerMenu()">
+        <span class="lien-icone">{{ lien.icone }}</span>
+        <span class="lien-libelle">{{ lien.libelle }}</span>
+      </a>
+    </div>
+
+    <div class="groupe" *ngIf="authService.isAdmin()">
+      <span class="groupe-titre">Administration</span>
+      <a *ngFor="let lien of liensAdmin"
+         [routerLink]="lien.chemin"
+         routerLinkActive="actif"
+         [routerLinkActiveOptions]="{ exact: true }"
+         (click)="fermerMenu()">
+        <span class="lien-icone">{{ lien.icone }}</span>
+        <span class="lien-libelle">{{ lien.libelle }}</span>
+      </a>
+    </div>
+
+    <!-- Bascule clair / sombre -->
+    <button class="bascule" (click)="basculerTheme()"
+            role="switch" [attr.aria-checked]="themeClair"
+            [attr.aria-label]="themeClair ? 'Passer en thème sombre' : 'Passer en thème clair'"
+            [title]="themeClair ? 'Passer en thème sombre' : 'Passer en thème clair'">
+      <span class="bascule-piste">
+        <span class="bascule-curseur">{{ themeClair ? '☀' : '☾' }}</span>
+      </span>
+      <span class="bascule-txt">{{ themeClair ? 'Thème clair' : 'Thème sombre' }}</span>
+    </button>
+
+    <!-- Profil + déconnexion -->
+    <div class="profil">
+      <div class="profil-pastille">{{ initiales }}</div>
+      <div class="profil-infos">
+        <span class="profil-nom">{{ authService.getUsername() }}</span>
+        <span class="profil-role">{{ authService.isAdmin() ? 'Administrateur' : 'Citoyen' }}</span>
+      </div>
+      <button class="btn-sortie" (click)="seDeconnecter()" title="Se déconnecter"
+              aria-label="Se déconnecter">⏻</button>
+      <button class="btn-sortie btn-sortie-effacer" (click)="seDeconnecterEtEffacer()"
+              title="Se déconnecter et effacer mes conversations (poste partagé)"
+              aria-label="Se déconnecter et effacer mes conversations">🧹</button>
+    </div>
+  </div>
+</nav>

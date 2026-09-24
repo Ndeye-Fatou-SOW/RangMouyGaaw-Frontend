@@ -1,0 +1,118 @@
+<div class="page-wrap">
+
+  <header class="page-head">
+    <div>
+      <div class="eyebrow">Administration · Réseau</div>
+      <h1>Gestion des lignes</h1>
+      <div class="filet-drapeau" style="margin-top:12px"></div>
+    </div>
+    <button (click)="afficherFormulaire ? fermerFormulaire() : ouvrirAjout()"
+            class="btn" [class.btn-or]="!afficherFormulaire"
+            [class.btn-fantome]="afficherFormulaire">
+      {{ afficherFormulaire ? '✕ Annuler' : '+ Ajouter une ligne' }}
+    </button>
+  </header>
+
+  <div *ngIf="messageSucces" class="msg msg-succes">✅ {{ messageSucces }}</div>
+  <div *ngIf="erreur" class="msg msg-erreur">⚠ {{ erreur }}</div>
+
+  <section *ngIf="afficherFormulaire" class="carte carte-pad formulaire">
+    <h3>{{ ligneEnEditionId ? '✏️ Modifier la ligne' : '🛣 Nouvelle ligne' }}</h3>
+
+    <div class="form-grille">
+      <div class="form-groupe">
+        <label>Numéro *</label>
+        <input type="text" [(ngModel)]="nouvelleLigne.numero"
+               placeholder="DDD-27" class="champ"/>
+      </div>
+      <div class="form-groupe">
+        <label>Nom</label>
+        <input type="text" [(ngModel)]="nouvelleLigne.nom"
+               placeholder="Pikine — UCAD" class="champ"/>
+      </div>
+      <div class="form-groupe">
+        <label>Départ *</label>
+        <input type="text" [(ngModel)]="nouvelleLigne.depart"
+               placeholder="Pikine" class="champ"/>
+      </div>
+      <div class="form-groupe">
+        <label>Arrivée *</label>
+        <input type="text" [(ngModel)]="nouvelleLigne.arrivee"
+               placeholder="UCAD" class="champ"/>
+      </div>
+      <div class="form-groupe">
+        <label>Tarif (FCFA)</label>
+        <input type="number" [(ngModel)]="nouvelleLigne.tarif"
+               placeholder="250" class="champ"/>
+      </div>
+      <div class="form-groupe">
+        <label>Durée (minutes)</label>
+        <input type="number" [(ngModel)]="nouvelleLigne.dureeMinutes"
+               placeholder="35" class="champ"/>
+      </div>
+      <div class="form-groupe">
+        <label>Statut</label>
+        <select [(ngModel)]="nouvelleLigne.statut" class="champ">
+          <option *ngFor="let s of statuts" [value]="s">{{ s }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button (click)="enregistrerLigne()" class="btn btn-or">
+        {{ ligneEnEditionId ? 'Enregistrer les modifications' : 'Enregistrer la ligne' }}
+      </button>
+      <button (click)="fermerFormulaire()" class="btn btn-fantome">Annuler</button>
+    </div>
+  </section>
+
+  <section class="carte">
+    <div class="carte-titre">
+      <h3>🛣 Lignes du réseau</h3>
+      <span class="texte-doux">{{ lignes.length }} ligne(s)</span>
+    </div>
+
+    <div *ngIf="chargement" class="carte-pad">
+      <div class="skeleton skeleton-ligne"></div>
+      <div class="skeleton skeleton-ligne"></div>
+      <div class="skeleton skeleton-ligne"></div>
+    </div>
+
+    <div class="table-scroll" *ngIf="!chargement && lignes.length > 0">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Numéro</th>
+            <th>Nom</th>
+            <th>Trajet</th>
+            <th>Tarif</th>
+            <th>Durée</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let l of lignes">
+            <td><strong>{{ l.numero }}</strong></td>
+            <td>{{ l.nom || '—' }}</td>
+            <td>{{ l.depart }} <span class="fleche">→</span> {{ l.arrivee }}</td>
+            <td class="tarif">{{ l.tarif }} FCFA</td>
+            <td>{{ l.dureeMinutes ?? '—' }} min</td>
+            <td><span class="badge" [ngClass]="getBadgeClass(l.statut)">{{ l.statut }}</span></td>
+            <td>
+              <div class="cellule-actions">
+                <button (click)="ouvrirModification(l)" class="btn-icone" title="Modifier">✏️</button>
+                <button (click)="supprimerLigne(l)" class="btn-icone danger" title="Supprimer">🗑</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="!chargement && lignes.length === 0" class="etat-vide">
+      <span class="vide-icone">🛣</span>
+      Aucune ligne enregistrée
+    </div>
+  </section>
+</div>

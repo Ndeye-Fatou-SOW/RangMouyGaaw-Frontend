@@ -1,1 +1,713 @@
-/* You can add global styles to this file, and also import other style files */
+/* ============================================================
+   RANG MOY GAAW — DESIGN SYSTEM GLOBAL
+   Transport & Mobilité · Sénégal
+   ------------------------------------------------------------
+   Toutes les couleurs, typographies, espacements et composants
+   partagés sont définis ici. Les fichiers CSS des composants ne
+   doivent contenir que ce qui leur est vraiment spécifique.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+/* ---------- 1. TOKENS ---------- */
+/* Les valeurs qui ne dépendent pas du thème sont définies une seule fois ici.
+   Tout ce qui change entre clair et sombre est regroupé plus bas, en §1b. */
+:root {
+  /* Or — couleur d'accent principale, commune aux deux thèmes */
+  --or-500: #f5a623;
+  --or-400: #ffb944;
+
+  /* Drapeau sénégalais — utilisé en touches fines, jamais en aplat */
+  --sn-vert: #00853f;
+  --sn-jaune: #fdef42;
+  --sn-rouge: #ef2b2d;
+
+  /* Typographie */
+  --font-titre: 'Syne', sans-serif;
+  --font-texte: 'DM Sans', sans-serif;
+  /* Les chiffres de Syne (0 et 1 notamment) deviennent illisibles en grand :
+     les valeurs numériques utilisent DM Sans, plus lisible en tabulaire. */
+  --font-chiffre: 'DM Sans', sans-serif;
+
+  /* Rayons */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 18px;
+  --r-full: 999px;
+
+  /* Espacements */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+
+  /* Chrome applicatif */
+  --h-navbar: 68px;
+  --w-sidebar: 246px;
+
+  --transition: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-theme: background 260ms ease, color 260ms ease, border-color 260ms ease;
+}
+
+/* ---------- 1b. THÈMES ---------- */
+/* Thème sombre : valeur par défaut du produit (cohérent avec la carte GPS
+   nocturne et l'usage en soirée). Le thème clair est défini juste après et
+   s'active via l'attribut data-theme="clair" posé sur <html>. */
+:root,
+:root[data-theme='sombre'] {
+  color-scheme: dark;
+
+  /* Fonds — dégradé de profondeur bleu nuit */
+  --nuit-900: #060e1c;
+  --nuit-800: #0a1628;
+  --nuit-700: #0f1f38;
+  --nuit-600: #16294a;
+  --nuit-500: #1e355c;
+
+  --or-300: #ffd68a;
+  --or-txt: #f5a623;   /* or lisible en texte sur fond sombre */
+  --or-a15: rgba(245, 166, 35, 0.15);
+  --or-a30: rgba(245, 166, 35, 0.3);
+
+  /* Sémantique */
+  --succes: #2ecc71;
+  --alerte: #ff9800;
+  --danger: #ff5252;
+  --info: #4aa8ff;
+
+  /* Texte */
+  --txt-100: #ffffff;
+  --txt-200: rgba(255, 255, 255, 0.82);
+  --txt-300: rgba(255, 255, 255, 0.58);
+  --txt-400: rgba(255, 255, 255, 0.38);
+
+  /* Surfaces & bordures */
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-hover: rgba(255, 255, 255, 0.07);
+  --bordure: rgba(255, 255, 255, 0.09);
+  --bordure-forte: rgba(255, 255, 255, 0.16);
+
+  /* Surfaces dérivées — évitent les rgba() en dur dans les composants */
+  --creux: rgba(0, 0, 0, 0.25);          /* champs, cellules en retrait */
+  --creux-fort: rgba(0, 0, 0, 0.35);     /* zones de saisie accentuées */
+  --voile: linear-gradient(160deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02));
+  --separateur: rgba(255, 255, 255, 0.05);
+  --survol-doux: rgba(255, 255, 255, 0.035);
+  --verre: rgba(6, 14, 28, 0.85);        /* pastilles flottantes sur la carte */
+  --sur-accent: #060e1c;                 /* texte posé sur un aplat or */
+  --billet-fond: linear-gradient(165deg, #12233f, #0a1628);
+  --fond-barre: linear-gradient(180deg, var(--nuit-800), var(--nuit-900));
+
+  /* Ombres */
+  --ombre-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --ombre-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --ombre-lg: 0 20px 50px rgba(0, 0, 0, 0.45);
+  --lueur-or: 0 0 24px rgba(245, 166, 35, 0.25);
+
+  /* Halos d'ambiance du fond applicatif */
+  --halo-1: rgba(30, 53, 92, 0.55);
+  --halo-2: rgba(245, 166, 35, 0.07);
+
+}
+
+/* Thème clair : le bleu nuit devient un bleu profond réservé au texte et aux
+   surfaces d'accent ; l'or est assombri pour rester lisible sur fond blanc. */
+:root[data-theme='clair'] {
+  color-scheme: light;
+
+  --nuit-900: #ffffff;
+  --nuit-800: #f2f5fa;
+  --nuit-700: #ffffff;
+  --nuit-600: #eef2f8;
+  --nuit-500: #dfe6f0;
+
+  /* L'or vif passe mal sur blanc : on descend en luminosité pour le texte
+     et les bordures, tout en gardant --or-500 pour les aplats. */
+  --or-300: #9a6410;
+  --or-txt: #8a5a0d;   /* or lisible en texte sur fond clair */
+  --or-a15: rgba(245, 166, 35, 0.16);
+  --or-a30: rgba(199, 132, 22, 0.42);
+
+  --succes: #128046;
+  --alerte: #b26a00;
+  --danger: #c62828;
+  --info: #1565c0;
+
+  --txt-100: #0a1628;
+  --txt-200: rgba(10, 22, 40, 0.86);
+  --txt-300: rgba(10, 22, 40, 0.62);
+  --txt-400: rgba(10, 22, 40, 0.45);
+
+  --surface: rgba(10, 22, 40, 0.035);
+  --surface-hover: rgba(10, 22, 40, 0.065);
+  --bordure: rgba(10, 22, 40, 0.12);
+  --bordure-forte: rgba(10, 22, 40, 0.22);
+
+  --creux: rgba(10, 22, 40, 0.035);
+  --creux-fort: rgba(10, 22, 40, 0.055);
+  --voile: linear-gradient(160deg, rgba(255, 255, 255, 0.9), rgba(247, 249, 252, 0.75));
+  --separateur: rgba(10, 22, 40, 0.08);
+  --survol-doux: rgba(10, 22, 40, 0.03);
+  --verre: rgba(255, 255, 255, 0.9);
+  --sur-accent: #ffffff;
+  --billet-fond: linear-gradient(165deg, #ffffff, #f4f7fb);
+  --fond-barre: #f2f5fa;
+
+  --ombre-sm: 0 1px 3px rgba(10, 22, 40, 0.08);
+  --ombre-md: 0 4px 16px rgba(10, 22, 40, 0.09);
+  --ombre-lg: 0 12px 34px rgba(10, 22, 40, 0.12);
+  --lueur-or: 0 2px 14px rgba(245, 166, 35, 0.35);
+
+  /* En clair, les halos sont beaucoup plus discrets pour ne pas salir le blanc */
+  --halo-1: rgba(30, 53, 92, 0.05);
+  --halo-2: rgba(245, 166, 35, 0.06);
+
+}
+
+/* ---------- 2. RESET ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-texte);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--txt-200);
+  background: var(--nuit-900);
+  transition: var(--transition-theme);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-titre);
+  font-weight: 700;
+  color: var(--txt-100);
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+p { margin: 0; }
+
+a { color: inherit; text-decoration: none; }
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* Barres de défilement discrètes, accordées au thème */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--bordure-forte);
+  border-radius: var(--r-full);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--or-a30); background-clip: content-box; }
+
+::selection { background: var(--or-a30); color: var(--txt-100); }
+
+:focus-visible {
+  outline: 2px solid var(--or-500);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+/* ---------- 3. MISE EN PAGE APPLICATIVE ---------- */
+.app-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(1100px 620px at 12% -8%, var(--halo-1), transparent 60%),
+    radial-gradient(900px 520px at 96% 4%, var(--halo-2), transparent 55%),
+    var(--nuit-900);
+  transition: var(--transition-theme);
+}
+
+/* Conteneur standard des pages internes */
+.page-wrap {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: var(--sp-6) var(--sp-5) var(--sp-7);
+}
+
+/* En-tête de page : titre + éventuelle action à droite */
+.page-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-6);
+}
+
+.page-head .eyebrow {
+  font-size: 11px;
+  letter-spacing: 2.4px;
+  text-transform: uppercase;
+  color: var(--or-txt);
+  font-weight: 600;
+  margin-bottom: var(--sp-2);
+}
+
+.page-head h1 {
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 800;
+}
+
+.page-head .sous-titre {
+  color: var(--txt-300);
+  font-size: 14px;
+  margin-top: var(--sp-2);
+}
+
+/* Filet aux couleurs du drapeau — signature visuelle du produit */
+.filet-drapeau {
+  height: 3px;
+  width: 72px;
+  border-radius: var(--r-full);
+  background: linear-gradient(
+    90deg,
+    var(--sn-vert) 0 33%,
+    var(--sn-jaune) 33% 66%,
+    var(--sn-rouge) 66%
+  );
+}
+
+/* ---------- 4. CARTES ---------- */
+.carte {
+  background: var(--voile);
+  border: 1px solid var(--bordure);
+  border-radius: var(--r-lg);
+  box-shadow: var(--ombre-md);
+  backdrop-filter: blur(8px);
+}
+
+.carte-pad { padding: var(--sp-5); }
+
+.carte-titre {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-5);
+  border-bottom: 1px solid var(--bordure);
+}
+
+.carte-titre h3 {
+  font-size: 15px;
+  letter-spacing: 0.2px;
+}
+
+/* ---------- 5. TUILES STATISTIQUES ---------- */
+.stats-grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(196px, 1fr));
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-6);
+}
+
+.stat-tuile {
+  position: relative;
+  overflow: hidden;
+  padding: var(--sp-5);
+  border-radius: var(--r-lg);
+  background: var(--voile);
+  border: 1px solid var(--bordure);
+  transition: transform var(--transition), border-color var(--transition);
+}
+
+.stat-tuile:hover {
+  transform: translateY(-3px);
+  border-color: var(--bordure-forte);
+}
+
+/* Liseré coloré à gauche, variable selon le ton de la tuile */
+.stat-tuile::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--ton, var(--or-500));
+}
+
+.stat-tuile.ton-or     { --ton: var(--or-500); }
+.stat-tuile.ton-vert   { --ton: var(--succes); }
+.stat-tuile.ton-orange { --ton: var(--alerte); }
+.stat-tuile.ton-rouge  { --ton: var(--danger); }
+.stat-tuile.ton-bleu   { --ton: var(--info); }
+
+.stat-tuile .stat-icone {
+  font-size: 20px;
+  opacity: 0.85;
+  margin-bottom: var(--sp-3);
+  display: block;
+}
+
+.stat-tuile .stat-valeur {
+  font-family: var(--font-chiffre);
+  font-size: 34px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.5px;
+  color: var(--ton, var(--or-500));
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-tuile .stat-libelle {
+  margin-top: var(--sp-2);
+  font-size: 11px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--txt-400);
+  font-weight: 500;
+}
+
+/* ---------- 6. BOUTONS ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: 11px 20px;
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  font-family: var(--font-titre);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btn-or {
+  background: linear-gradient(135deg, var(--or-400), var(--or-500));
+  color: var(--sur-accent);
+}
+.btn-or:hover:not(:disabled) {
+  box-shadow: var(--lueur-or);
+  transform: translateY(-1px);
+}
+
+.btn-fantome {
+  background: var(--surface);
+  border-color: var(--bordure-forte);
+  color: var(--txt-200);
+}
+.btn-fantome:hover:not(:disabled) {
+  background: var(--surface-hover);
+  color: var(--txt-100);
+}
+
+.btn-danger {
+  background: rgba(255, 82, 82, 0.14);
+  border-color: rgba(255, 82, 82, 0.4);
+  color: #ff8a8a;
+}
+.btn-danger:hover:not(:disabled) { background: rgba(255, 82, 82, 0.24); }
+
+.btn-bloc { width: 100%; }
+
+/* Boutons d'action compacts dans les tableaux */
+.btn-icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  cursor: pointer;
+  font-size: 13px;
+  transition: all var(--transition);
+}
+.btn-icone:hover { background: var(--surface-hover); border-color: var(--bordure-forte); }
+.btn-icone.danger:hover { background: rgba(255, 82, 82, 0.18); border-color: rgba(255, 82, 82, 0.4); }
+
+/* ---------- 7. FORMULAIRES ---------- */
+.form-groupe { margin-bottom: var(--sp-4); }
+
+.form-groupe label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  color: var(--txt-400);
+  margin-bottom: var(--sp-2);
+}
+
+.champ {
+  width: 100%;
+  padding: 12px 15px;
+  background: var(--creux);
+  border: 1.5px solid var(--bordure);
+  border-radius: var(--r-md);
+  color: var(--txt-100);
+  outline: none;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.champ::placeholder { color: var(--txt-400); }
+
+.champ:focus {
+  border-color: var(--or-500);
+  background: var(--creux-fort);
+}
+
+textarea.champ { resize: vertical; min-height: 96px; }
+
+/* Les <option> héritent du fond du système : on force le thème sombre */
+select.champ option { background: var(--nuit-700); color: var(--txt-100); }
+
+.form-grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(228px, 1fr));
+  gap: var(--sp-4);
+}
+
+.form-actions {
+  display: flex;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+  flex-wrap: wrap;
+}
+
+/* ---------- 8. TABLEAUX ---------- */
+.table-scroll {
+  overflow-x: auto;
+  border-radius: var(--r-lg);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+
+.table thead th {
+  text-align: left;
+  padding: var(--sp-3) var(--sp-4);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  color: var(--txt-400);
+  background: var(--creux);
+  border-bottom: 1px solid var(--bordure);
+  white-space: nowrap;
+}
+
+.table tbody td {
+  padding: var(--sp-4);
+  border-bottom: 1px solid var(--separateur);
+  font-size: 14px;
+  color: var(--txt-200);
+}
+
+.table tbody tr { transition: background var(--transition); }
+.table tbody tr:hover { background: var(--survol-doux); }
+.table tbody tr:last-child td { border-bottom: none; }
+
+.table strong { color: var(--txt-100); font-weight: 600; }
+
+.cellule-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+/* ---------- 9. BADGES ---------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: var(--r-full);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.badge-vert   { background: rgba(46, 204, 113, 0.13); color: var(--succes); border-color: rgba(46, 204, 113, 0.3); }
+.badge-orange { background: rgba(255, 152, 0, 0.13);  color: var(--alerte); border-color: rgba(255, 152, 0, 0.3); }
+.badge-rouge  { background: rgba(255, 82, 82, 0.13);  color: var(--danger); border-color: rgba(255, 82, 82, 0.3); }
+.badge-bleu   { background: rgba(74, 168, 255, 0.13); color: var(--info);   border-color: rgba(74, 168, 255, 0.3); }
+.badge-gris   { background: var(--surface-hover); color: var(--txt-300); border-color: var(--bordure); }
+
+/* ---------- 10. MESSAGES ---------- */
+.msg {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 13px 17px;
+  border-radius: var(--r-md);
+  font-size: 14px;
+  margin-bottom: var(--sp-4);
+  border: 1px solid transparent;
+  animation: apparition 260ms ease;
+}
+
+.msg-succes { background: rgba(46, 204, 113, 0.1); color: #86e5b0; border-color: rgba(46, 204, 113, 0.28); }
+.msg-erreur { background: rgba(255, 82, 82, 0.1);  color: #ff9b9b; border-color: rgba(255, 82, 82, 0.28); }
+.msg-info   { background: rgba(74, 168, 255, 0.1); color: #a5d3ff; border-color: rgba(74, 168, 255, 0.28); }
+
+/* ---------- 11. ÉTATS VIDES & CHARGEMENT ---------- */
+.etat-vide {
+  padding: var(--sp-7) var(--sp-5);
+  text-align: center;
+  color: var(--txt-400);
+}
+
+.etat-vide .vide-icone {
+  font-size: 40px;
+  opacity: 0.35;
+  display: block;
+  margin-bottom: var(--sp-3);
+}
+
+/* Squelettes de chargement — évitent le saut de mise en page */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface) 25%,
+    var(--surface-hover) 50%,
+    var(--surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: balayage 1.4s ease-in-out infinite;
+  border-radius: var(--r-sm);
+}
+
+.skeleton-ligne { height: 14px; margin-bottom: var(--sp-3); }
+.skeleton-ligne:last-child { width: 62%; margin-bottom: 0; }
+
+/* ---------- 12. ANIMATIONS ---------- */
+@keyframes balayage {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes apparition {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes monte {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulsation {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.55; transform: scale(0.9); }
+}
+
+.anim-monte { animation: monte 380ms cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+
+/* Décalage en cascade pour les grilles — effet d'entrée séquentiel */
+.anim-monte:nth-child(1) { animation-delay: 0ms; }
+.anim-monte:nth-child(2) { animation-delay: 55ms; }
+.anim-monte:nth-child(3) { animation-delay: 110ms; }
+.anim-monte:nth-child(4) { animation-delay: 165ms; }
+.anim-monte:nth-child(5) { animation-delay: 220ms; }
+
+/* Point clignotant « temps réel » */
+.point-live {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--succes);
+  box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.18);
+  animation: pulsation 1.8s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- 13. LEAFLET — ACCORD AVEC LE THÈME ---------- */
+.leaflet-container { background: var(--nuit-800); font-family: var(--font-texte); }
+
+
+.leaflet-popup-content-wrapper {
+  background: var(--nuit-700);
+  color: var(--txt-200);
+  border: 1px solid var(--bordure-forte);
+  border-radius: var(--r-md);
+  box-shadow: var(--ombre-lg);
+}
+
+.leaflet-popup-content { margin: 14px 16px; }
+.leaflet-popup-tip { background: var(--nuit-700); border: 1px solid var(--bordure-forte); }
+.leaflet-popup-close-button { color: var(--txt-300) !important; }
+
+.leaflet-control-zoom a {
+  background: var(--nuit-700) !important;
+  color: var(--txt-200) !important;
+  border-color: var(--bordure) !important;
+}
+.leaflet-control-zoom a:hover { background: var(--nuit-600) !important; color: var(--or-500) !important; }
+
+.leaflet-control-attribution {
+  background: var(--verre) !important;
+  color: var(--txt-400) !important;
+  font-size: 10px;
+}
+.leaflet-control-attribution a { color: var(--txt-300) !important; }
+
+/* Transition douce des marqueurs de bus entre deux positions GPS */
+.marqueur-bus {
+  transition: transform 900ms linear;
+}
+
+/* ---------- 14. RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .page-wrap { padding: var(--sp-5) var(--sp-4) var(--sp-6); }
+}
+
+@media (max-width: 640px) {
+  body { font-size: 14px; }
+  .page-wrap { padding: var(--sp-4) var(--sp-3) var(--sp-6); }
+  .stats-grille { grid-template-columns: repeat(2, 1fr); gap: var(--sp-3); }
+  .stat-tuile { padding: var(--sp-4); }
+  .stat-tuile .stat-valeur { font-size: 26px; }
+  .form-grille { grid-template-columns: 1fr; }
+  .page-head { flex-direction: column; align-items: stretch; }
+}

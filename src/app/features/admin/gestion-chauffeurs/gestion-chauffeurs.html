@@ -1,0 +1,116 @@
+<div class="page-wrap">
+
+  <header class="page-head">
+    <div>
+      <div class="eyebrow">Administration · Personnel roulant</div>
+      <h1>Gestion des chauffeurs</h1>
+      <div class="filet-drapeau" style="margin-top:12px"></div>
+    </div>
+    <button (click)="afficherFormulaire ? fermerFormulaire() : ouvrirAjout()"
+            class="btn" [class.btn-or]="!afficherFormulaire"
+            [class.btn-fantome]="afficherFormulaire">
+      {{ afficherFormulaire ? '✕ Annuler' : '+ Ajouter un chauffeur' }}
+    </button>
+  </header>
+
+  <div *ngIf="messageSucces" class="msg msg-succes">✅ {{ messageSucces }}</div>
+  <div *ngIf="erreur" class="msg msg-erreur">⚠ {{ erreur }}</div>
+
+  <section *ngIf="afficherFormulaire" class="carte carte-pad formulaire">
+    <h3>{{ chauffeurEnEditionId ? '✏️ Modifier le chauffeur' : '🧑‍✈️ Nouveau chauffeur' }}</h3>
+
+    <div class="form-grille">
+      <div class="form-groupe">
+        <label>Prénom *</label>
+        <input type="text" [(ngModel)]="nouveauChauffeur.prenom"
+               placeholder="Mamadou" class="champ"/>
+      </div>
+      <div class="form-groupe">
+        <label>Nom *</label>
+        <input type="text" [(ngModel)]="nouveauChauffeur.nom"
+               placeholder="Diallo" class="champ"/>
+      </div>
+      <div class="form-groupe">
+        <label>Téléphone</label>
+        <input type="tel" [(ngModel)]="nouveauChauffeur.telephone"
+               placeholder="77 123 45 67" class="champ"/>
+      </div>
+      <div class="form-groupe">
+        <label>N° de permis</label>
+        <input type="text" [(ngModel)]="nouveauChauffeur.numeroPermis"
+               placeholder="SN-2024-0001" class="champ"/>
+      </div>
+      <div class="form-groupe">
+        <label>Statut</label>
+        <select [(ngModel)]="nouveauChauffeur.statut" class="champ">
+          <option *ngFor="let s of statuts" [value]="s">{{ s }}</option>
+        </select>
+      </div>
+      <div class="form-groupe">
+        <label>Score de conduite (0-5)</label>
+        <input type="number" [(ngModel)]="nouveauChauffeur.scoreConduite"
+               min="0" max="5" step="0.1" class="champ"/>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button (click)="enregistrerChauffeur()" class="btn btn-or">
+        {{ chauffeurEnEditionId ? 'Enregistrer les modifications' : 'Enregistrer' }}
+      </button>
+      <button (click)="fermerFormulaire()" class="btn btn-fantome">Annuler</button>
+    </div>
+  </section>
+
+  <section class="carte">
+    <div class="carte-titre">
+      <h3>🧑‍✈️ Chauffeurs</h3>
+      <span class="texte-doux">{{ chauffeurs.length }} chauffeur(s)</span>
+    </div>
+
+    <div *ngIf="chargement" class="carte-pad">
+      <div class="skeleton skeleton-ligne"></div>
+      <div class="skeleton skeleton-ligne"></div>
+      <div class="skeleton skeleton-ligne"></div>
+    </div>
+
+    <div class="table-scroll" *ngIf="!chargement && chauffeurs.length > 0">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nom complet</th>
+            <th>Téléphone</th>
+            <th>N° permis</th>
+            <th>Score</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of chauffeurs">
+            <td><strong>{{ c.prenom }} {{ c.nom }}</strong></td>
+            <td>{{ c.telephone || '—' }}</td>
+            <td>{{ c.numeroPermis || '—' }}</td>
+            <td><span class="score">⭐ {{ c.scoreConduite ?? '—' }}</span></td>
+            <td><span class="badge" [ngClass]="getBadgeClass(c.statut)">{{ c.statut }}</span></td>
+            <td>
+              <div class="cellule-actions">
+                <select (change)="changerStatut(c.id, $any($event.target).value)"
+                        class="select-statut">
+                  <option value="">Statut…</option>
+                  <option *ngFor="let s of statuts" [value]="s">{{ s }}</option>
+                </select>
+                <button (click)="ouvrirModification(c)" class="btn-icone" title="Modifier">✏️</button>
+                <button (click)="supprimerChauffeur(c)" class="btn-icone danger" title="Supprimer">🗑</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="!chargement && chauffeurs.length === 0" class="etat-vide">
+      <span class="vide-icone">🧑‍✈️</span>
+      Aucun chauffeur enregistré
+    </div>
+  </section>
+</div>

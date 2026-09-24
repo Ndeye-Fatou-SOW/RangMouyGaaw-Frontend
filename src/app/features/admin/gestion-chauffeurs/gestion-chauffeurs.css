@@ -1,0 +1,47 @@
+/* Styles communs aux quatre écrans de gestion (bus, lignes, chauffeurs,
+   incidents). Le reste vient du design system global (styles.css). */
+
+.formulaire {
+  margin-bottom: var(--sp-5);
+  animation: monte 300ms ease both;
+}
+
+.formulaire h3 {
+  font-size: 16px;
+  margin-bottom: var(--sp-4);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+/* Sélecteur de statut compact placé dans la colonne d'actions */
+.select-statut {
+  padding: 6px 10px;
+  border-radius: var(--r-sm);
+  background: var(--creux);
+  border: 1px solid var(--bordure);
+  color: var(--txt-300);
+  font-size: 11.5px;
+  cursor: pointer;
+  max-width: 130px;
+  transition: border-color var(--transition);
+}
+.select-statut:hover { border-color: var(--or-a30); }
+.select-statut option { background: var(--nuit-700); color: var(--txt-100); }
+
+.score { color: var(--or-300); font-weight: 600; font-size: 13px; }
+.tarif { color: var(--or-500); font-weight: 600; }
+.fleche { color: var(--or-500); margin: 0 4px; }
+.texte-doux { color: var(--txt-400); }
+
+/* Description d'incident : tronquée pour ne pas déformer le tableau */
+.desc-cellule {
+  max-width: 340px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .select-statut { max-width: 100%; }
+}

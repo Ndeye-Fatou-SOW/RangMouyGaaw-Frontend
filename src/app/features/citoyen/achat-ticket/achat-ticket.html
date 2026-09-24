@@ -1,0 +1,121 @@
+<div class="page-wrap ticket-page">
+
+  <header class="page-head">
+    <div>
+      <div class="eyebrow">Billetterie numérique</div>
+      <h1>Acheter un ticket</h1>
+      <p class="sous-titre">Payez sans espèces via Wave ou Orange Money</p>
+      <div class="filet-drapeau" style="margin-top:12px"></div>
+    </div>
+  </header>
+
+  <div class="ticket-grille">
+
+    <!-- Formulaire d'achat -->
+    <section class="carte carte-pad">
+      <div class="form-groupe">
+        <label>Ligne de bus</label>
+        <select [(ngModel)]="ligneSelectionnee" class="champ">
+          <option value="">— Choisir une ligne —</option>
+          <option *ngFor="let ligne of lignes" [value]="ligne.id">
+            {{ ligne.numero }} — {{ ligne.depart }} → {{ ligne.arrivee }} ({{ ligne.tarif }} FCFA)
+          </option>
+        </select>
+      </div>
+
+      <div class="form-groupe">
+        <label>Mode de paiement</label>
+        <div class="paiements">
+          <button type="button" class="paiement"
+                  [class.actif]="modePaiement === 'WAVE'"
+                  (click)="modePaiement = 'WAVE'">
+            <span class="paiement-icone" style="background:#1dc8f2">W</span>
+            <span class="paiement-nom">Wave</span>
+          </button>
+          <button type="button" class="paiement"
+                  [class.actif]="modePaiement === 'ORANGE_MONEY'"
+                  (click)="modePaiement = 'ORANGE_MONEY'">
+            <span class="paiement-icone" style="background:#ff7900">OM</span>
+            <span class="paiement-nom">Orange Money</span>
+          </button>
+          <button type="button" class="paiement"
+                  [class.actif]="modePaiement === 'CASH'"
+                  (click)="modePaiement = 'CASH'">
+            <span class="paiement-icone" style="background:#2ecc71">₣</span>
+            <span class="paiement-nom">Espèces</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-groupe" *ngIf="modePaiement !== 'CASH'">
+        <label>Numéro de téléphone</label>
+        <input type="tel" [(ngModel)]="telephone"
+               placeholder="77 123 45 67" class="champ"/>
+      </div>
+
+      <!-- Récapitulatif du montant, mis à jour au choix de la ligne -->
+      <div class="recap" *ngIf="ligneChoisie">
+        <span class="recap-lbl">Montant à payer</span>
+        <span class="recap-montant">{{ ligneChoisie.tarif }} <small>FCFA</small></span>
+      </div>
+
+      <div *ngIf="erreur" class="msg msg-erreur">⚠ {{ erreur }}</div>
+
+      <button (click)="acheterTicket()" [disabled]="chargement"
+              class="btn btn-or btn-bloc" style="margin-top:16px">
+        {{ chargement ? 'Traitement en cours…' : '💳 Payer et obtenir le ticket' }}
+      </button>
+    </section>
+
+    <!-- Ticket émis -->
+    <section class="billet" *ngIf="ticket">
+      <div class="billet-haut">
+        <div>
+          <div class="billet-marque">Rang Moy <em>Gaaw</em></div>
+          <div class="billet-type">Titre de transport</div>
+        </div>
+        <span class="badge" [class.badge-vert]="!enAttentePaiement"
+              [class.badge-orange]="enAttentePaiement">
+          {{ enAttentePaiement ? 'En attente de paiement' : ticket.statut }}
+        </span>
+      </div>
+
+      <div class="billet-perfo"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+      <div class="billet-corps">
+        <div class="msg msg-info" *ngIf="enAttentePaiement">
+          ⏳ Ce titre ne sera valable qu'une fois votre paiement confirmé
+          par l'opérateur.
+        </div>
+
+        <div class="billet-code">
+          <span class="billet-lbl">Code de validation</span>
+          <strong>{{ ticket.codeQR }}</strong>
+        </div>
+
+        <div class="billet-lignes">
+          <div><span class="billet-lbl">Montant</span>
+               <b class="tarif">{{ ticket.montant }} FCFA</b></div>
+          <div><span class="billet-lbl">Acheté le</span>
+               <b>{{ ticket.dateAchat | date:'dd/MM/yy HH:mm' }}</b></div>
+          <div><span class="billet-lbl">Valable jusqu'à</span>
+               <b>{{ ticket.dateExpiration | date:'dd/MM/yy HH:mm' }}</b></div>
+        </div>
+      </div>
+
+      <div class="billet-bas">
+        <div class="filet-drapeau" style="width:100%"></div>
+      </div>
+    </section>
+
+    <!-- Aide affichée tant qu'aucun ticket n'a été acheté -->
+    <section class="carte carte-pad aide" *ngIf="!ticket">
+      <h3>🎫 Comment ça marche</h3>
+      <ol class="etapes">
+        <li><b>Choisissez votre ligne</b><span>Le tarif s'affiche automatiquement.</span></li>
+        <li><b>Sélectionnez votre moyen de paiement</b><span>Wave, Orange Money ou espèces.</span></li>
+        <li><b>Recevez votre code</b><span>Présentez-le au valideur à l'entrée du bus.</span></li>
+      </ol>
+    </section>
+  </div>
+</div>

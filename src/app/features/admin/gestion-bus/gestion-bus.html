@@ -1,0 +1,120 @@
+<div class="page-wrap">
+
+  <header class="page-head">
+    <div>
+      <div class="eyebrow">Administration · Parc de véhicules</div>
+      <h1>Gestion des bus</h1>
+      <div class="filet-drapeau" style="margin-top:12px"></div>
+    </div>
+    <button (click)="afficherFormulaire ? fermerFormulaire() : ouvrirAjout()"
+            class="btn" [class.btn-or]="!afficherFormulaire"
+            [class.btn-fantome]="afficherFormulaire">
+      {{ afficherFormulaire ? '✕ Annuler' : '+ Ajouter un bus' }}
+    </button>
+  </header>
+
+  <div *ngIf="messageSucces" class="msg msg-succes">✅ {{ messageSucces }}</div>
+  <div *ngIf="erreur" class="msg msg-erreur">⚠ {{ erreur }}</div>
+
+  <!-- Formulaire -->
+  <section *ngIf="afficherFormulaire" class="carte carte-pad formulaire">
+    <h3>{{ busEnEditionId ? '✏️ Modifier le bus' : '🚌 Nouveau bus' }}</h3>
+
+    <div class="form-grille">
+      <div class="form-groupe">
+        <label>Immatriculation *</label>
+        <input type="text" [(ngModel)]="nouveauBus.immatriculation"
+               placeholder="DK-1234-AB" class="champ"/>
+      </div>
+      <div class="form-groupe">
+        <label>Modèle *</label>
+        <input type="text" [(ngModel)]="nouveauBus.modele"
+               placeholder="Mercedes Citaro" class="champ"/>
+      </div>
+      <div class="form-groupe">
+        <label>Capacité (places)</label>
+        <input type="number" [(ngModel)]="nouveauBus.capacite"
+               placeholder="80" class="champ"/>
+      </div>
+      <div class="form-groupe">
+        <label>Statut</label>
+        <select [(ngModel)]="nouveauBus.statut" class="champ">
+          <option *ngFor="let s of statuts" [value]="s">{{ s }}</option>
+        </select>
+      </div>
+      <div class="form-groupe">
+        <label>Score de fiabilité (0-5)</label>
+        <input type="number" [(ngModel)]="nouveauBus.scoreFilabilite"
+               min="0" max="5" step="0.1" class="champ"/>
+      </div>
+      <div class="form-groupe">
+        <label>Kilométrage</label>
+        <input type="number" [(ngModel)]="nouveauBus.kilometrage"
+               placeholder="0" class="champ"/>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button (click)="enregistrerBus()" class="btn btn-or">
+        {{ busEnEditionId ? 'Enregistrer les modifications' : 'Enregistrer le bus' }}
+      </button>
+      <button (click)="fermerFormulaire()" class="btn btn-fantome">Annuler</button>
+    </div>
+  </section>
+
+  <!-- Tableau -->
+  <section class="carte">
+    <div class="carte-titre">
+      <h3>🚌 Véhicules enregistrés</h3>
+      <span class="texte-doux">{{ bus.length }} bus</span>
+    </div>
+
+    <div *ngIf="chargement" class="carte-pad">
+      <div class="skeleton skeleton-ligne"></div>
+      <div class="skeleton skeleton-ligne"></div>
+      <div class="skeleton skeleton-ligne"></div>
+    </div>
+
+    <div class="table-scroll" *ngIf="!chargement && bus.length > 0">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Immatriculation</th>
+            <th>Modèle</th>
+            <th>Capacité</th>
+            <th>Kilométrage</th>
+            <th>Fiabilité</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let b of bus">
+            <td><strong>{{ b.immatriculation }}</strong></td>
+            <td>{{ b.modele }}</td>
+            <td>{{ b.capacite }} places</td>
+            <td>{{ (b.kilometrage | number) || '—' }} km</td>
+            <td><span class="score">⭐ {{ b.scoreFilabilite ?? '—' }}</span></td>
+            <td><span class="badge" [ngClass]="getBadgeClass(b.statut)">{{ b.statut }}</span></td>
+            <td>
+              <div class="cellule-actions">
+                <select (change)="changerStatut(b.id, $any($event.target).value)"
+                        class="select-statut">
+                  <option value="">Statut…</option>
+                  <option *ngFor="let s of statuts" [value]="s">{{ s }}</option>
+                </select>
+                <button (click)="ouvrirModification(b)" class="btn-icone" title="Modifier">✏️</button>
+                <button (click)="supprimerBus(b)" class="btn-icone danger" title="Supprimer">🗑</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="!chargement && bus.length === 0" class="etat-vide">
+      <span class="vide-icone">🚏</span>
+      Aucun bus enregistré — commencez par en ajouter un.
+    </div>
+  </section>
+</div>

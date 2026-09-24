@@ -1,0 +1,227 @@
+.ticket-grille {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: var(--sp-5);
+  align-items: start;
+}
+
+/* ---- Choix du moyen de paiement ---- */
+.paiements {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-3);
+}
+
+.paiement {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-4) var(--sp-2);
+  border-radius: var(--r-md);
+  background: var(--creux);
+  border: 1.5px solid var(--bordure);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.paiement:hover { border-color: var(--bordure-forte); background: var(--surface-hover); }
+
+.paiement.actif {
+  border-color: var(--or-500);
+  background: var(--or-a15);
+  box-shadow: var(--lueur-or);
+}
+
+.paiement-icone {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: #fff;
+  font-family: var(--font-titre);
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.paiement-nom { font-size: 12px; color: var(--txt-300); font-weight: 500; text-align: center; }
+.paiement.actif .paiement-nom { color: var(--or-300); }
+
+/* ---- Récapitulatif ---- */
+.recap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--sp-4);
+  padding: var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--or-a15);
+  border: 1px dashed var(--or-a30);
+}
+
+.recap-lbl { font-size: 12px; color: var(--txt-300); }
+
+.recap-montant {
+  font-family: var(--font-chiffre);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  color: var(--or-500);
+}
+.recap-montant small { font-size: 13px; margin-left: 3px; opacity: 0.75; }
+
+/* ---- Billet ---- */
+.billet {
+  background: var(--billet-fond);
+  border: 1px solid var(--or-a30);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--ombre-lg), var(--lueur-or);
+  animation: monte 420ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+.billet-haut {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+}
+
+.billet-marque {
+  font-family: var(--font-titre);
+  font-weight: 800;
+  font-size: 17px;
+  color: var(--txt-100);
+}
+.billet-marque em { color: var(--or-500); font-style: normal; }
+
+.billet-type {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--txt-400);
+  margin-top: 3px;
+}
+
+/* Perforation décorative séparant les deux parties du billet */
+.billet-perfo {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 var(--sp-4);
+  position: relative;
+}
+.billet-perfo::before {
+  content: '';
+  position: absolute;
+  inset: 50% var(--sp-5) auto;
+  border-top: 1.5px dashed var(--bordure-forte);
+}
+.billet-perfo i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--nuit-900);
+  z-index: 1;
+}
+
+.billet-corps { padding: var(--sp-5); }
+
+.billet-code {
+  text-align: center;
+  padding: var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--creux-fort);
+  border: 1px solid var(--bordure);
+  margin-bottom: var(--sp-4);
+}
+
+.billet-code strong {
+  display: block;
+  font-family: var(--font-chiffre);
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: var(--or-500);
+  margin-top: 6px;
+  word-break: break-all;
+}
+
+.billet-lbl {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  color: var(--txt-400);
+}
+
+.billet-lignes { display: flex; flex-direction: column; gap: var(--sp-3); }
+
+.billet-lignes div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--separateur);
+}
+.billet-lignes div:last-child { border-bottom: none; padding-bottom: 0; }
+.billet-lignes b { font-size: 13px; color: var(--txt-100); }
+
+.tarif { color: var(--or-500) !important; }
+
+.billet-bas { padding: 0 var(--sp-5) var(--sp-5); }
+
+/* ---- Encart d'aide ---- */
+.aide h3 { font-size: 15px; margin-bottom: var(--sp-4); }
+
+.etapes {
+  list-style: none;
+  counter-reset: etape;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.etapes li {
+  counter-increment: etape;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 38px;
+  position: relative;
+}
+
+.etapes li::before {
+  content: counter(etape);
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--or-a15);
+  border: 1px solid var(--or-a30);
+  color: var(--or-300);
+  font-family: var(--font-titre);
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.etapes b { font-size: 13.5px; color: var(--txt-100); }
+.etapes span { font-size: 12.5px; color: var(--txt-400); }
+
+@media (max-width: 900px) {
+  .ticket-grille { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .paiements { grid-template-columns: 1fr; }
+  .paiement { flex-direction: row; justify-content: flex-start; padding: var(--sp-3) var(--sp-4); }
+  .billet-code strong { font-size: 20px; letter-spacing: 2px; }
+}

@@ -1,11 +1,36 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="utf-8">
-  <title>TransportFrontend</title>
+  <title>Rang Moy Gaaw — Transport &amp; Mobilité</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+        content="Suivi GPS temps réel des bus de Dakar, billetterie mobile et assistant transport en français et en wolof.">
+  <meta name="theme-color" content="#0a1628">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Applique le thème avant le premier rendu : sans cela, la page
+       s'afficherait brièvement dans le mauvais thème au chargement. -->
+  <script>
+    (function () {
+      try {
+        var choix = localStorage.getItem('rmg_theme');
+        if (choix !== 'clair' && choix !== 'sombre') {
+          choix = window.matchMedia &&
+                  window.matchMedia('(prefers-color-scheme: light)').matches
+            ? 'clair' : 'sombre';
+        }
+        document.documentElement.setAttribute('data-theme', choix);
+        document.querySelector('meta[name="theme-color"]')
+          .setAttribute('content', choix === 'clair' ? '#ffffff' : '#0a1628');
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'sombre');
+      }
+    })();
+  </script>
 </head>
 <body>
   <app-root></app-root>

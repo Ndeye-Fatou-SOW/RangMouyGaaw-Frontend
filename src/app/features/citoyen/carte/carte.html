@@ -1,0 +1,113 @@
+<div class="carte-page">
+
+  <!-- Bandeau : identité + indicateurs temps réel -->
+  <header class="carte-entete">
+    <div class="entete-titre">
+      <div class="eyebrow">
+        <span class="point-live"></span>
+        Suivi temps réel — Dakar
+      </div>
+      <h1>Carte du réseau</h1>
+      <div class="filet-drapeau"></div>
+    </div>
+
+    <div class="entete-stats">
+      <div class="mini-stat">
+        <span class="mini-val">{{ totalVehicules }}</span>
+        <span class="mini-lbl">Véhicules</span>
+      </div>
+      <div class="mini-stat vert">
+        <span class="mini-val">{{ totalEnLigne }}</span>
+        <span class="mini-lbl">En ligne</span>
+      </div>
+      <div class="mini-stat rouge">
+        <span class="mini-val">{{ totalEnRetard }}</span>
+        <span class="mini-lbl">En retard</span>
+      </div>
+      <div class="mini-stat or">
+        <span class="mini-val">{{ attenteMoyenne }}<small>min</small></span>
+        <span class="mini-lbl">Attente moy.</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="carte-corps">
+
+    <!-- Carte Leaflet -->
+    <div class="carte-conteneur">
+      <div id="carte-dakar" class="carte-map"></div>
+
+      <!-- Légende superposée -->
+      <div class="legende">
+        <span><i class="pastille-ok"></i> En ligne</span>
+        <span><i class="pastille-retard"></i> En retard</span>
+      </div>
+    </div>
+
+    <!-- Panneau latéral -->
+    <aside class="panneau">
+
+      <div class="panneau-section">
+        <h3 class="panneau-titre">Lignes</h3>
+        <div class="filtres">
+          <button class="filtre" [class.actif]="ligneSelectionnee === 'toutes'"
+                  (click)="filtrerLigne('toutes')">
+            Toutes les lignes
+          </button>
+          <button *ngFor="let ligne of lignes; let i = index"
+                  class="filtre"
+                  [class.actif]="ligneSelectionnee === ligne.id"
+                  (click)="filtrerLigne(ligne.id)">
+            <i class="pastille-ligne" [style.background]="couleurLigne(i)"></i>
+            <span class="filtre-num">{{ ligne.numero }}</span>
+            <span class="filtre-trajet">{{ ligne.depart }} → {{ ligne.arrivee }}</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="panneau-section flexible">
+        <h3 class="panneau-titre">
+          Véhicules
+          <span class="compteur">{{ busAffiches.length }}</span>
+        </h3>
+
+        <!-- Attente des premières positions GPS -->
+        <div *ngIf="busConnectes.length === 0" class="attente">
+          <div class="skeleton skeleton-ligne" style="height:54px"></div>
+          <div class="skeleton skeleton-ligne" style="height:54px"></div>
+          <div class="skeleton skeleton-ligne" style="height:54px;width:100%"></div>
+          <p class="attente-txt">⏳ En attente des positions GPS…</p>
+        </div>
+
+        <div *ngIf="busConnectes.length > 0 && busAffiches.length === 0" class="etat-vide">
+          <span class="vide-icone">🚏</span>
+          Aucun véhicule sur cette ligne
+        </div>
+
+        <div class="bus-liste">
+          <button *ngFor="let bus of busAffiches"
+                  class="bus-carte"
+                  (click)="centrerSurBus(bus.busId)">
+            <span class="bus-pastille"
+                  [style.background]="couleurStatut(bus.enRetard)"></span>
+
+            <span class="bus-infos">
+              <span class="bus-nom">{{ bus.immatriculation }}</span>
+              <span class="bus-detail" [class.retard]="bus.enRetard">
+                {{ bus.enRetard ? 'En retard' : 'En ligne' }}
+                · {{ bus.vitesse }} km/h
+                · {{ bus.attente }} min
+              </span>
+            </span>
+
+            <span class="bus-remplissage"
+                  [style.color]="couleurRemplissage(bus.remplissage)"
+                  [style.border-color]="couleurRemplissage(bus.remplissage)">
+              {{ bus.remplissage }}%
+            </span>
+          </button>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>

@@ -1,0 +1,85 @@
+<div class="page-wrap">
+
+  <header class="page-head">
+    <div>
+      <div class="eyebrow">Participation citoyenne</div>
+      <h1>{{ incidentEnEditionId ? 'Modifier mon signalement' : 'Signaler un incident' }}</h1>
+      <p class="sous-titre">Aidez-nous à améliorer le réseau de transport de Dakar</p>
+      <div class="filet-drapeau" style="margin-top:12px"></div>
+    </div>
+  </header>
+
+  <div *ngIf="messageSucces" class="msg msg-succes">✅ {{ messageSucces }}</div>
+  <div *ngIf="erreur" class="msg msg-erreur">⚠ {{ erreur }}</div>
+
+  <div class="signal-grille">
+
+    <!-- Formulaire -->
+    <section class="carte carte-pad">
+      <div class="form-groupe">
+        <label>Type d'incident</label>
+        <div class="types">
+          <button *ngFor="let t of types" type="button" class="type"
+                  [class.actif]="nouvelIncident.type === t"
+                  (click)="nouvelIncident.type = t">
+            <span class="type-icone">{{ getIconeType(t) }}</span>
+            <span class="type-nom">{{ t.replace('_', ' ') }}</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-groupe">
+        <label>Description *</label>
+        <textarea [(ngModel)]="nouvelIncident.description"
+                  placeholder="Décrivez ce que vous avez observé : lieu, ligne concernée, gravité…"
+                  class="champ" rows="5"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button (click)="signaler()" [disabled]="chargement" class="btn btn-or">
+          {{ chargement ? 'Envoi en cours…'
+             : (incidentEnEditionId ? 'Enregistrer les modifications' : '🚨 Envoyer le signalement') }}
+        </button>
+        <button *ngIf="incidentEnEditionId" (click)="annulerModification()"
+                class="btn btn-fantome">Annuler</button>
+      </div>
+    </section>
+
+    <!-- Historique personnel -->
+    <section class="carte">
+      <div class="carte-titre">
+        <h3>📋 Mes signalements</h3>
+        <span class="compteur">{{ mesIncidents.length }}</span>
+      </div>
+
+      <div *ngIf="chargementListe" class="carte-pad">
+        <div class="skeleton skeleton-ligne" style="height:60px"></div>
+        <div class="skeleton skeleton-ligne" style="height:60px"></div>
+      </div>
+
+      <div *ngIf="!chargementListe && mesIncidents.length === 0" class="etat-vide">
+        <span class="vide-icone">📭</span>
+        Vous n'avez signalé aucun incident.
+      </div>
+
+      <div class="mes-incidents" *ngIf="!chargementListe && mesIncidents.length > 0">
+        <article *ngFor="let i of mesIncidents" class="incident">
+          <div class="incident-corps">
+            <div class="incident-haut">
+              <span class="incident-type">
+                {{ getIconeType(i.type) }} {{ i.type.replace('_', ' ') }}
+              </span>
+              <span class="badge" [ngClass]="getBadgeClass(i.statut)">{{ i.statut }}</span>
+            </div>
+            <p class="incident-desc">{{ i.description }}</p>
+            <span class="incident-date">{{ i.dateSignalement | date:'dd/MM/yyyy à HH:mm' }}</span>
+          </div>
+          <div class="incident-actions">
+            <button (click)="modifier(i)" class="btn-icone" title="Modifier">✏️</button>
+            <button (click)="supprimer(i)" class="btn-icone danger" title="Supprimer">🗑</button>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
+</div>

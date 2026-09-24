@@ -1,0 +1,13 @@
+/* Décale le contenu pour laisser la place à la barre latérale fixe.
+   Sans .avec-barre (login / register), la page occupe tout l'écran. */
+main.avec-barre {
+  margin-left: var(--w-sidebar);
+  min-height: 100vh;
+}
+
+@media (max-width: 900px) {
+  main.avec-barre {
+    margin-left: 0;
+    padding-top: var(--h-navbar);
+  }
+}

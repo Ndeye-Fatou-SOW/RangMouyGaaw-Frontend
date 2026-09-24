@@ -1,0 +1,146 @@
+<div class="page-wrap">
+
+  <header class="page-head">
+    <div>
+      <div class="eyebrow">Administration · CETUD / Dakar Dem Dikk</div>
+      <h1>Tableau de bord</h1>
+      <div class="filet-drapeau" style="margin-top:12px"></div>
+    </div>
+    <a routerLink="/citoyen" class="btn btn-fantome">🗺 Voir la carte live</a>
+  </header>
+
+  <!-- Indicateurs -->
+  <section class="stats-grille">
+    <div class="stat-tuile ton-or anim-monte">
+      <span class="stat-icone">🚌</span>
+      <div class="stat-valeur">{{ totalBus }}</div>
+      <div class="stat-libelle">Bus du parc</div>
+    </div>
+
+    <div class="stat-tuile ton-vert anim-monte">
+      <span class="stat-icone">🟢</span>
+      <div class="stat-valeur">{{ busEnService }}</div>
+      <div class="stat-libelle">En service</div>
+    </div>
+
+    <div class="stat-tuile ton-bleu anim-monte">
+      <span class="stat-icone">🛣</span>
+      <div class="stat-valeur">{{ totalLignes }}</div>
+      <div class="stat-libelle">Lignes actives</div>
+    </div>
+
+    <div class="stat-tuile ton-rouge anim-monte">
+      <span class="stat-icone">⚠</span>
+      <div class="stat-valeur">{{ incidentsOuverts }}</div>
+      <div class="stat-libelle">Incidents ouverts</div>
+    </div>
+  </section>
+
+  <!-- Accès rapides -->
+  <section class="acces-rapides">
+    <a routerLink="/admin/bus" class="acces">
+      <span class="acces-icone">🚌</span>
+      <span class="acces-txt"><b>Gérer les bus</b><small>Parc, statuts, fiabilité</small></span>
+      <span class="acces-fleche">→</span>
+    </a>
+    <a routerLink="/admin/lignes" class="acces">
+      <span class="acces-icone">🛣</span>
+      <span class="acces-txt"><b>Gérer les lignes</b><small>Trajets, tarifs, durées</small></span>
+      <span class="acces-fleche">→</span>
+    </a>
+    <a routerLink="/admin/chauffeurs" class="acces">
+      <span class="acces-icone">🧑‍✈️</span>
+      <span class="acces-txt"><b>Chauffeurs</b><small>Permis, scores de conduite</small></span>
+      <span class="acces-fleche">→</span>
+    </a>
+    <a routerLink="/admin/incidents" class="acces">
+      <span class="acces-icone">⚠</span>
+      <span class="acces-txt"><b>Incidents</b><small>{{ totalIncidents }} signalement(s)</small></span>
+      <span class="acces-fleche">→</span>
+    </a>
+  </section>
+
+  <!-- Parc de bus -->
+  <section class="carte" style="margin-bottom:24px">
+    <div class="carte-titre">
+      <h3>🚌 Parc de véhicules</h3>
+      <a routerLink="/admin/bus" class="lien-gerer">Gérer →</a>
+    </div>
+
+    <div *ngIf="chargement" class="carte-pad">
+      <div class="skeleton skeleton-ligne"></div>
+      <div class="skeleton skeleton-ligne"></div>
+      <div class="skeleton skeleton-ligne"></div>
+    </div>
+
+    <div class="table-scroll" *ngIf="!chargement && busActifs.length > 0">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Immatriculation</th>
+            <th>Modèle</th>
+            <th>Capacité</th>
+            <th>Kilométrage</th>
+            <th>Fiabilité</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let bus of busActifs">
+            <td><strong>{{ bus.immatriculation }}</strong></td>
+            <td>{{ bus.modele }}</td>
+            <td>{{ bus.capacite }} places</td>
+            <td>{{ (bus.kilometrage | number) || '—' }} km</td>
+            <td>
+              <span class="score">⭐ {{ bus.scoreFilabilite ?? '—' }}</span>
+            </td>
+            <td>
+              <span class="badge" [ngClass]="classeStatutBus(bus.statut)">{{ bus.statut }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="!chargement && busActifs.length === 0" class="etat-vide">
+      <span class="vide-icone">🚏</span>
+      Aucun bus enregistré
+    </div>
+  </section>
+
+  <!-- Lignes -->
+  <section class="carte">
+    <div class="carte-titre">
+      <h3>🛣 Lignes du réseau</h3>
+      <a routerLink="/admin/lignes" class="lien-gerer">Gérer →</a>
+    </div>
+
+    <div class="table-scroll" *ngIf="lignes.length > 0">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Numéro</th>
+            <th>Trajet</th>
+            <th>Tarif</th>
+            <th>Durée</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ligne of lignes">
+            <td><strong>{{ ligne.numero }}</strong></td>
+            <td>{{ ligne.depart }} <span class="fleche">→</span> {{ ligne.arrivee }}</td>
+            <td class="tarif">{{ ligne.tarif }} FCFA</td>
+            <td>{{ ligne.dureeMinutes ?? '—' }} min</td>
+            <td><span class="badge badge-vert">{{ ligne.statut }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="lignes.length === 0" class="etat-vide">
+      <span class="vide-icone">🛣</span>
+      Aucune ligne enregistrée
+    </div>
+  </section>
+</div>

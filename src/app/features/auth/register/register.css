@@ -1,0 +1,208 @@
+/* Page d'authentification : vitrine à gauche, formulaire à droite.
+   Les couleurs et typographies viennent du design system global. */
+
+.auth {
+  min-height: 100vh;
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(900px 600px at 18% 45%, var(--halo-1), transparent 62%),
+    radial-gradient(700px 500px at 85% 10%, var(--halo-2), transparent 58%),
+    var(--nuit-900);
+  transition: var(--transition-theme);
+}
+
+/* Cercles concentriques évoquant un radar de suivi GPS */
+.auth::before,
+.auth::after {
+  content: '';
+  position: absolute;
+  left: 8%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  border: 1px solid var(--bordure);
+  pointer-events: none;
+}
+.auth::before { width: 540px; height: 540px; }
+.auth::after  { width: 360px; height: 360px; }
+
+/* ---- Vitrine ---- */
+.auth-vitrine {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--sp-6);
+  padding: var(--sp-7) 56px;
+  position: relative;
+  z-index: 1;
+}
+
+.marque-nom {
+  font-family: var(--font-titre);
+  font-weight: 800;
+  font-size: 26px;
+  color: var(--txt-100);
+  letter-spacing: -0.5px;
+}
+.marque-nom em { color: var(--or-txt); font-style: normal; }
+
+.marque-sous {
+  font-size: 11px;
+  color: var(--or-txt);
+  letter-spacing: 2.4px;
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+.auth-vitrine .filet-drapeau { margin-top: 12px; width: 88px; height: 4px; }
+
+.accroche h1 {
+  font-size: clamp(36px, 4.4vw, 54px);
+  font-weight: 800;
+  line-height: 1.08;
+  margin-bottom: var(--sp-5);
+}
+.accroche h1 em { color: var(--or-txt); font-style: normal; }
+
+.accroche p {
+  font-size: 15px;
+  color: var(--txt-300);
+  line-height: 1.8;
+  max-width: 400px;
+}
+
+.chiffres { display: flex; gap: var(--sp-7); flex-wrap: wrap; }
+
+.chiffre-val {
+  display: block;
+  font-family: var(--font-chiffre);
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: var(--or-txt);
+  line-height: 1;
+}
+
+.chiffre-lbl {
+  display: block;
+  margin-top: 5px;
+  font-size: 11.5px;
+  color: var(--txt-400);
+  letter-spacing: 0.4px;
+}
+
+/* ---- Panneau formulaire ---- */
+.auth-panneau {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--sp-7) 52px;
+  background: var(--nuit-700);
+  border-left: 1px solid var(--bordure);
+  backdrop-filter: blur(18px);
+  position: relative;
+  z-index: 1;
+}
+
+/* Bande aux couleurs du drapeau en pied de panneau */
+.auth-panneau::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 4px;
+  background: linear-gradient(90deg,
+    var(--sn-vert) 0 33%, var(--sn-jaune) 33% 66%, var(--sn-rouge) 66%);
+}
+
+.panneau-entete { text-align: center; margin-bottom: var(--sp-6); }
+
+.panneau-logo {
+  display: inline-grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--r-lg);
+  background: linear-gradient(135deg, var(--or-400), var(--or-500));
+  font-size: 27px;
+  margin-bottom: var(--sp-4);
+  box-shadow: var(--lueur-or);
+}
+
+.panneau-entete h2 { font-size: 22px; font-weight: 800; }
+.panneau-entete p { font-size: 13px; color: var(--txt-400); margin-top: 5px; }
+
+/* ---- Choix du rôle (inscription) ---- */
+.roles { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+
+.role {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: 12px;
+  border-radius: var(--r-md);
+  background: var(--creux);
+  border: 1.5px solid var(--bordure);
+  color: var(--txt-300);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.role:hover { border-color: var(--bordure-forte); }
+.role.actif {
+  border-color: var(--or-500);
+  background: var(--or-a15);
+  color: var(--or-300);
+}
+
+.lien-bas {
+  text-align: center;
+  margin-top: var(--sp-5);
+  font-size: 13px;
+  color: var(--txt-400);
+}
+.lien-bas a { color: var(--or-500); font-weight: 600; }
+.lien-bas a:hover { text-decoration: underline; }
+
+/* ---- Responsive ---- */
+@media (max-width: 1000px) {
+  .auth-vitrine { display: none; }
+  .auth::before, .auth::after { display: none; }
+  .auth-panneau { width: 100%; border-left: none; padding: var(--sp-6) var(--sp-5); }
+}
+
+@media (max-width: 480px) {
+  .auth-panneau { padding: var(--sp-5) var(--sp-4); }
+  .roles { grid-template-columns: 1fr; }
+}
+
+/* ---- Bascule de thème (coin supérieur droit) ---- */
+.bascule-auth {
+  position: absolute;
+  top: var(--sp-5);
+  right: var(--sp-5);
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  color: var(--txt-200);
+  font-size: 15px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.bascule-auth:hover {
+  background: var(--or-a15);
+  border-color: var(--or-a30);
+  color: var(--or-300);
+  transform: rotate(-15deg);
+}

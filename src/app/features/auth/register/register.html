@@ -1,0 +1,77 @@
+<div class="auth">
+
+  <!-- Bascule clair / sombre, accessible avant même la connexion -->
+  <button class="bascule-auth" (click)="basculerTheme()"
+          role="switch" [attr.aria-checked]="themeClair"
+          [attr.aria-label]="themeClair ? 'Passer en thème sombre' : 'Passer en thème clair'"
+          [title]="themeClair ? 'Passer en thème sombre' : 'Passer en thème clair'">
+    {{ themeClair ? '☀' : '☾' }}
+  </button>
+
+  <!-- Vitrine -->
+  <aside class="auth-vitrine">
+    <div>
+      <div class="marque-nom">Rang Moy <em>Gaaw</em></div>
+      <div class="marque-sous">Transport &amp; Mobilité · Sénégal</div>
+      <div class="filet-drapeau"></div>
+    </div>
+
+    <div class="accroche">
+      <h1>Rejoignez<br>le <em>réseau</em></h1>
+      <p>
+        Créez votre compte pour suivre les bus en temps réel, acheter vos
+        tickets sans espèces et discuter avec Dama dem en français ou en wolof.
+      </p>
+    </div>
+
+    <div class="chiffres">
+      <div>
+        <span class="chiffre-val">1 248</span>
+        <span class="chiffre-lbl">Arrêts cartographiés</span>
+      </div>
+      <div>
+        <span class="chiffre-val">&lt; 5s</span>
+        <span class="chiffre-lbl">Latence GPS</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Formulaire -->
+  <section class="auth-panneau">
+    <div class="panneau-entete">
+      <div class="panneau-logo">🚌</div>
+      <h2>Créer un compte</h2>
+      <p>Compte citoyen · Rang Moy Gaaw</p>
+    </div>
+
+    <div class="form-groupe">
+      <label>Nom d'utilisateur</label>
+      <input type="text" [(ngModel)]="username"
+             placeholder="mamadou_diallo" class="champ"/>
+    </div>
+
+    <div class="form-groupe">
+      <label>Mot de passe</label>
+      <input type="password" [(ngModel)]="password"
+             placeholder="••••••••" class="champ"/>
+    </div>
+
+    <div class="form-groupe">
+      <label>Confirmer le mot de passe</label>
+      <input type="password" [(ngModel)]="confirmationPassword"
+             placeholder="••••••••" class="champ"
+             (keyup.enter)="sInscrire()"/>
+    </div>
+
+    <div *ngIf="erreur" class="msg msg-erreur">⚠ {{ erreur }}</div>
+
+    <button (click)="sInscrire()" [disabled]="chargement"
+            class="btn btn-or btn-bloc">
+      {{ chargement ? 'Création…' : 'Créer mon compte' }}
+    </button>
+
+    <div class="lien-bas">
+      Déjà un compte ? <a routerLink="/login">Se connecter</a>
+    </div>
+  </section>
+</div>

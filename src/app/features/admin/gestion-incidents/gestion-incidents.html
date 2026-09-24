@@ -1,0 +1,103 @@
+<div class="page-wrap">
+
+  <header class="page-head">
+    <div>
+      <div class="eyebrow">Administration · Supervision</div>
+      <h1>Gestion des incidents</h1>
+      <div class="filet-drapeau" style="margin-top:12px"></div>
+    </div>
+    <button (click)="afficherFormulaire ? fermerFormulaire() : ouvrirAjout()"
+            class="btn" [class.btn-danger]="!afficherFormulaire"
+            [class.btn-fantome]="afficherFormulaire">
+      {{ afficherFormulaire ? '✕ Annuler' : '+ Signaler un incident' }}
+    </button>
+  </header>
+
+  <div *ngIf="messageSucces" class="msg msg-succes">✅ {{ messageSucces }}</div>
+  <div *ngIf="erreur" class="msg msg-erreur">⚠ {{ erreur }}</div>
+
+  <section *ngIf="afficherFormulaire" class="carte carte-pad formulaire">
+    <h3>{{ incidentEnEditionId ? '✏️ Modifier l\'incident' : '🚨 Nouvel incident' }}</h3>
+
+    <div class="form-groupe">
+      <label>Type d'incident</label>
+      <select [(ngModel)]="nouvelIncident.type" class="champ">
+        <option *ngFor="let t of types" [value]="t">
+          {{ getIconeType(t) }} {{ t.replace('_', ' ') }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-groupe">
+      <label>Description *</label>
+      <textarea [(ngModel)]="nouvelIncident.description"
+                placeholder="Décrivez l'incident : lieu, ligne concernée, gravité…"
+                class="champ" rows="3"></textarea>
+    </div>
+
+    <div class="form-groupe" *ngIf="incidentEnEditionId">
+      <label>Statut</label>
+      <select [(ngModel)]="nouvelIncident.statut" class="champ">
+        <option *ngFor="let s of statuts" [value]="s">{{ s }}</option>
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button (click)="enregistrerIncident()" class="btn btn-or">
+        {{ incidentEnEditionId ? 'Enregistrer les modifications' : 'Signaler l\'incident' }}
+      </button>
+      <button (click)="fermerFormulaire()" class="btn btn-fantome">Annuler</button>
+    </div>
+  </section>
+
+  <section class="carte">
+    <div class="carte-titre">
+      <h3>⚠ Incidents signalés</h3>
+      <span class="texte-doux">{{ incidents.length }} incident(s)</span>
+    </div>
+
+    <div *ngIf="chargement" class="carte-pad">
+      <div class="skeleton skeleton-ligne"></div>
+      <div class="skeleton skeleton-ligne"></div>
+      <div class="skeleton skeleton-ligne"></div>
+    </div>
+
+    <div class="table-scroll" *ngIf="!chargement && incidents.length > 0">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let i of incidents">
+            <td><strong>{{ getIconeType(i.type) }} {{ i.type.replace('_', ' ') }}</strong></td>
+            <td class="desc-cellule" [title]="i.description">{{ i.description }}</td>
+            <td>{{ i.dateSignalement | date:'dd/MM HH:mm' }}</td>
+            <td><span class="badge" [ngClass]="getBadgeClass(i.statut)">{{ i.statut }}</span></td>
+            <td>
+              <div class="cellule-actions">
+                <select (change)="changerStatut(i.id, $any($event.target).value)"
+                        class="select-statut">
+                  <option value="">Statut…</option>
+                  <option *ngFor="let s of statuts" [value]="s">{{ s }}</option>
+                </select>
+                <button (click)="ouvrirModification(i)" class="btn-icone" title="Modifier">✏️</button>
+                <button (click)="supprimerIncident(i)" class="btn-icone danger" title="Supprimer">🗑</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="!chargement && incidents.length === 0" class="etat-vide">
+      <span class="vide-icone">✅</span>
+      Aucun incident signalé — le réseau est calme.
+    </div>
+  </section>
+</div>

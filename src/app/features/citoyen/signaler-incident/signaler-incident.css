@@ -1,0 +1,111 @@
+.signal-grille {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: var(--sp-5);
+  align-items: start;
+}
+
+/* ---- Sélection du type d'incident ---- */
+.types {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+  gap: var(--sp-3);
+}
+
+.type {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-4) var(--sp-2);
+  border-radius: var(--r-md);
+  background: var(--creux);
+  border: 1.5px solid var(--bordure);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.type:hover { border-color: var(--bordure-forte); background: var(--surface-hover); }
+
+.type.actif {
+  border-color: var(--danger);
+  background: rgba(255, 82, 82, 0.12);
+}
+
+.type-icone { font-size: 21px; }
+
+.type-nom {
+  font-size: 10.5px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--txt-400);
+  font-weight: 600;
+  text-align: center;
+}
+.type.actif .type-nom { color: #ff9b9b; }
+
+/* ---- Liste des signalements ---- */
+.compteur {
+  padding: 2px 9px;
+  border-radius: var(--r-full);
+  background: var(--or-a15);
+  color: var(--or-300);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.mes-incidents {
+  display: flex;
+  flex-direction: column;
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.incident {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-5);
+  border-bottom: 1px solid var(--separateur);
+  transition: background var(--transition);
+}
+.incident:last-child { border-bottom: none; }
+.incident:hover { background: var(--survol-doux); }
+
+.incident-corps { flex: 1; min-width: 0; }
+
+.incident-haut {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+}
+
+.incident-type {
+  font-family: var(--font-titre);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--txt-100);
+}
+
+.incident-desc {
+  font-size: 13px;
+  color: var(--txt-300);
+  line-height: 1.55;
+  word-break: break-word;
+}
+
+.incident-date {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--txt-400);
+}
+
+.incident-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+@media (max-width: 900px) {
+  .signal-grille { grid-template-columns: 1fr; }
+  .mes-incidents { max-height: none; }
+}

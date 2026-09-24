@@ -1,0 +1,312 @@
+/* Barre latérale fixe sur grand écran, tiroir sur mobile */
+.barre {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--w-sidebar);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-5) var(--sp-4);
+  background: var(--fond-barre);
+  border-right: 1px solid var(--bordure);
+  z-index: 900;
+  overflow-y: auto;
+}
+
+/* ---- Marque ---- */
+.marque {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--bordure);
+}
+
+.marque-pastille {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--r-md);
+  background: linear-gradient(135deg, var(--or-400), var(--or-500));
+  font-size: 19px;
+  flex-shrink: 0;
+}
+
+.marque-nom {
+  font-family: var(--font-titre);
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--txt-100);
+  display: block;
+  letter-spacing: -0.3px;
+}
+.marque-nom em { color: var(--or-txt); font-style: normal; }
+
+.marque-drapeau {
+  display: block;
+  height: 2.5px;
+  width: 42px;
+  margin-top: 5px;
+  border-radius: var(--r-full);
+  background: linear-gradient(90deg,
+    var(--sn-vert) 0 33%, var(--sn-jaune) 33% 66%, var(--sn-rouge) 66%);
+}
+
+/* ---- Liens ---- */
+.liens { display: flex; flex-direction: column; gap: var(--sp-5); flex: 1; }
+
+.groupe { display: flex; flex-direction: column; gap: 3px; }
+
+.groupe-titre {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--txt-400);
+  padding: 0 var(--sp-3) var(--sp-2);
+}
+
+.liens a {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 10px var(--sp-3);
+  border-radius: var(--r-md);
+  color: var(--txt-300);
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+  transition: all var(--transition);
+}
+
+.liens a:hover { background: var(--surface-hover); color: var(--txt-100); }
+
+.liens a.actif {
+  background: var(--or-a15);
+  color: var(--or-300);
+  font-weight: 600;
+}
+
+/* Curseur vertical sur l'élément actif */
+.liens a.actif::before {
+  content: '';
+  position: absolute;
+  left: -var(--sp-4);
+  left: calc(var(--sp-4) * -1);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 20px;
+  border-radius: 0 3px 3px 0;
+  background: var(--or-500);
+}
+
+.lien-icone { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+
+/* ---- Bascule de thème ---- */
+/* Poussée en bas de la barre, juste au-dessus du profil. */
+.bascule {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  margin-top: auto;
+  padding: 9px var(--sp-3);
+  border-radius: var(--r-md);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--txt-300);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--transition);
+}
+
+.bascule:hover {
+  background: var(--surface-hover);
+  color: var(--txt-100);
+  border-color: var(--bordure);
+}
+
+/* Piste de l'interrupteur : le curseur glisse à droite en thème clair */
+.bascule-piste {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  border-radius: var(--r-full);
+  background: var(--creux);
+  border: 1px solid var(--bordure);
+  flex-shrink: 0;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.bascule[aria-checked='true'] .bascule-piste {
+  background: var(--or-a15);
+  border-color: var(--or-a30);
+}
+
+.bascule-curseur {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--or-400), var(--or-500));
+  color: var(--sur-accent);
+  font-size: 10px;
+  line-height: 1;
+  box-shadow: var(--ombre-sm);
+  transition: transform var(--transition);
+}
+
+.bascule[aria-checked='true'] .bascule-curseur { transform: translateX(18px); }
+
+.bascule-txt { flex: 1; min-width: 0; }
+
+/* ---- Profil ---- */
+.profil {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+}
+
+.profil-pastille {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--nuit-500), var(--nuit-600));
+  border: 1px solid var(--or-a30);
+  color: var(--or-300);
+  font-family: var(--font-titre);
+  font-weight: 700;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.profil-infos { min-width: 0; flex: 1; }
+
+.profil-nom {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--txt-100);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profil-role { display: block; font-size: 10.5px; color: var(--txt-400); }
+
+.btn-sortie {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-sm);
+  background: transparent;
+  border: 1px solid var(--bordure);
+  color: var(--txt-300);
+  cursor: pointer;
+  font-size: 13px;
+  flex-shrink: 0;
+  transition: all var(--transition);
+}
+.btn-sortie:hover {
+  background: rgba(255, 82, 82, 0.16);
+  border-color: rgba(255, 82, 82, 0.4);
+  color: #ff8a8a;
+}
+
+/* Deconnexion + effacement des conversations (poste partage) : survol neutre,
+   l'action est moins definitive qu'une simple deconnexion. */
+.btn-sortie-effacer {
+  margin-left: 6px;
+}
+.btn-sortie-effacer:hover {
+  background: rgba(255, 176, 32, 0.16);
+  border-color: rgba(255, 176, 32, 0.4);
+  color: #ffc861;
+}
+
+/* ---- Bouton tiroir (masqué sur grand écran) ---- */
+.btn-tiroir { display: none; }
+
+/* ---- Mobile : la barre devient un bandeau + tiroir ---- */
+@media (max-width: 900px) {
+  .barre {
+    inset: 0 0 auto 0;
+    width: 100%;
+    height: var(--h-navbar);
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--sp-4);
+    border-right: none;
+    border-bottom: 1px solid var(--bordure);
+    overflow: visible;
+  }
+
+  .marque { padding-bottom: 0; border-bottom: none; }
+
+  .btn-tiroir {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    background: var(--surface);
+    border: 1px solid var(--bordure);
+    border-radius: var(--r-md);
+    cursor: pointer;
+  }
+
+  /* Icône « hamburger » dessinée en CSS, bascule en croix à l'ouverture */
+  .btn-tiroir span,
+  .btn-tiroir span::before,
+  .btn-tiroir span::after {
+    display: block;
+    width: 17px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--txt-100);
+    transition: all var(--transition);
+  }
+  .btn-tiroir span::before,
+  .btn-tiroir span::after { content: ''; position: absolute; }
+  .btn-tiroir span::before { transform: translateY(-5.5px); }
+  .btn-tiroir span::after  { transform: translateY(5.5px); }
+
+  .btn-tiroir span.croix { background: transparent; }
+  .btn-tiroir span.croix::before { transform: rotate(45deg); }
+  .btn-tiroir span.croix::after  { transform: rotate(-45deg); }
+
+  .liens {
+    position: fixed;
+    inset: var(--h-navbar) 0 auto 0;
+    flex-direction: column;
+    gap: var(--sp-4);
+    padding: var(--sp-4);
+    background: var(--nuit-800);
+    border-bottom: 1px solid var(--bordure);
+    box-shadow: var(--ombre-lg);
+    max-height: calc(100vh - var(--h-navbar));
+    overflow-y: auto;
+    transform: translateY(-8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all var(--transition);
+  }
+
+  .liens.ouvert { transform: translateY(0); opacity: 1; pointer-events: auto; }
+
+  .liens a.actif::before { display: none; }
+  .profil { margin-top: var(--sp-2); }
+}
