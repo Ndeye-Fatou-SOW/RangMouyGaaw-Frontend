@@ -1,59 +1,48 @@
-# TransportFrontend
+# Rang Moy Gaaw — Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.13.
+Interface web de **Rang Moy Gaaw**, une plateforme de mobilité urbaine pour le transport sénégalais (bus, BRT, navettes maritimes).
 
-## Development server
+- API : [RangMouyGaaw-Backend](https://github.com/Ndeye-Fatou-SOW/RangMouyGaaw-Backend)
+- Démonstration vidéo : [voir la vidéo](https://ucadedu-my.sharepoint.com/:v:/g/personal/ndeyefatou20_sow_ucad_edu_sn/IQDv5U1DwAalRaEkq-WVOAlZATMTkjBp15FNe6y_w9BDXWY?e=w7iGvX)
 
-To start a local development server, run:
+## Fonctionnalités
 
-```bash
-ng serve
-```
+**Espace citoyen**
+- Carte des bus en temps réel (Leaflet, positions reçues par WebSocket STOMP)
+- Achat de ticket
+- Signalement d'incident
+- Assistant « Dama dem », en français et en wolof
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+**Espace administrateur**
+- Tableau de bord
+- Gestion des bus, des lignes, des chauffeurs et des incidents
 
-## Code scaffolding
+**Commun**
+- Inscription et connexion, routes protégées par des guards selon le rôle
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Technologies
 
-```bash
-ng generate component component-name
-```
+Angular 21 · TypeScript · RxJS · Leaflet · STOMP (WebSocket) · Bootstrap 5
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Lancer le projet
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+Prérequis : Node.js et le backend démarré.
 
 ```bash
-ng build
+npm install
+npm start
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+L'application est servie sur http://localhost:4200. Les appels à l'API sont redirigés vers le backend par `proxy.conf.json`.
 
-## Running unit tests
+## Structure
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
+```
+src/app/core/       services (authentification, API) et guards
+src/app/features/   auth, citoyen (carte, tickets, incidents, assistant), admin
 ```
 
-## Running end-to-end tests
+## Auteure
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Ndéye Fatou SOW — Master 2 Systèmes d'Information Répartis, Université Cheikh Anta Diop de Dakar
+Portfolio : https://ndeye-fatou-sow.github.io/ndeyefatousow.github.io/
