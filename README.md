@@ -1,5 +1,7 @@
 # Rang Moy Gaaw — Frontend
 
+Projet académique — Master 2 Systèmes d'Information Répartis, Université Cheikh Anta Diop de Dakar (2026).
+
 Interface web de **Rang Moy Gaaw**, une plateforme de mobilité urbaine pour le transport sénégalais (bus, BRT, navettes maritimes).
 
 - API : [RangMouyGaaw-Backend](https://github.com/Ndeye-Fatou-SOW/RangMouyGaaw-Backend)
